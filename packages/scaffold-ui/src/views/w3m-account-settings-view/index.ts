@@ -236,10 +236,16 @@ export class W3mAccountSettingsView extends LitElement {
     const connectorId = ConnectorController.getConnectorId(namespace)
     const authConnector = ConnectorController.getAuthConnector()
 
+    // Check if smart accounts should be available based on user configuration
+    const defaultAccountTypes = OptionsController.state.defaultAccountTypes
+    const configuredAccountType = namespace ? defaultAccountTypes[namespace] : undefined
+    const isSmartAccountConfigured = configuredAccountType !== 'eoa'
+
     if (
       !authConnector ||
       connectorId !== CommonConstantsUtil.CONNECTOR_ID.AUTH ||
-      !isNetworkEnabled
+      !isNetworkEnabled ||
+      !isSmartAccountConfigured
     ) {
       return null
     }
